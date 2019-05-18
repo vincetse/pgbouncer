@@ -9,7 +9,7 @@ shell:
 clean:
 	docker rm -f $(docker ps -qa)
 
-psql:
+pool:
 	PGHOST=127.0.0.1 \
 	PGPORT=15432 \
 	PGUSER=postgres \
@@ -17,7 +17,7 @@ psql:
 	PGDATABASE=db \
 	psql
 
-pg2:
+direct:
 	PGHOST=127.0.0.1 \
 	PGPORT=25432 \
 	PGUSER=postgres \
