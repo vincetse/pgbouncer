@@ -1,0 +1,7 @@
+# https://gist.github.com/mrw34/c97bb03ea1054afb551886ffc8b63c3b
+
+create:
+	openssl req -new -text -passout pass:abcd -subj /CN=localhost -out server.req
+	openssl rsa -in privkey.pem -passin pass:abcd -out server.key
+	openssl req -x509 -in server.req -text -key server.key -out server.crt
+	chmod 600 server.key
