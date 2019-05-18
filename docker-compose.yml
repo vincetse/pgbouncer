@@ -6,9 +6,11 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "p0stgres"
       POSTGRES_DB: "db"
+    ports:
+    - "25432:5432"
     volumes:
     - "./db/server.crt:/var/lib/postgresql/server.crt:ro"
-    - "./dbserver.key:/var/lib/postgresql/server.key:ro"
+    - "./db/server.key:/var/lib/postgresql/server.key:ro"
     command:
     - "-c"
     - "ssl_cert_file=/var/lib/postgresql/server.crt"
@@ -31,17 +33,13 @@ services:
     - "./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt:ro"
 
   migrations:
-    build:
-      context: "migrations"
-      dockerfile: "Dockerfile"
+    image: "amacneil/dbmate"
     environment:
-      DATABASE_URL: "postgres://postgres:p0stgres@db/db"
+      DATABASE_URL: "postgres://postgres:p0stgres@db/db?sslmode=disable"
     depends_on:
     - "db"
+    - "pgbouncer"
     command:
-    - "goose"
-    - "-env"
-    - "development"
     - "up"
     volumes:
-    - "./migrations/db:/go/db:ro"
+    - "./migrations/db:/db:ro"
